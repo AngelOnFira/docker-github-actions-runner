@@ -10,9 +10,14 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      REPO: ${{ github.repository }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set repo name to lowercase
+        run: echo "REPO=${REPO,,}" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -33,13 +38,13 @@ jobs:
           context: .
           file: Dockerfile.base
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/${{ github.repository }}-base:latest
+          tags: ghcr.io/${{ env.REPO }}-base:latest
           push: true
           cache-from: type=gha,scope=base
           cache-to: type=gha,scope=base,mode=max
 
       - name: Patch Dockerfile to use our base image
-        run: sed -i "s|FROM.*|FROM ghcr.io/${{ github.repository }}-base:latest|" Dockerfile
+        run: sed -i "s|FROM.*|FROM ghcr.io/${{ env.REPO }}-base:latest|" Dockerfile
 
       - name: Build and push runner image
         uses: docker/build-push-action@v6
@@ -47,7 +52,7 @@ jobs:
           context: .
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/${{ env.REPO }}:latest
           push: true
           cache-from: type=gha,scope=runner
           cache-to: type=gha,scope=runner,mode=max
