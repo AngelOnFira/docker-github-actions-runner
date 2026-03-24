@@ -112,6 +112,31 @@
       "packages": [
         "yq"
       ]
+    },
+    {
+      "category": "game-build-deps",
+      "source": "apt",
+      "packages": [
+        "libx11-dev",
+        "libxi-dev",
+        "libxcursor-dev",
+        "libxrandr-dev",
+        "libxinerama-dev",
+        "libwayland-dev",
+        "libxkbcommon-dev",
+        "libvulkan-dev",
+        "libudev-dev",
+        "libasound2-dev",
+        "perl",
+        "make"
+      ]
+    },
+    {
+      "category": "cross-compilation",
+      "source": "apt",
+      "packages": [
+        "mingw-w64"
+      ]
     }
   ]
 }
